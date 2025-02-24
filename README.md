@@ -4,6 +4,8 @@
 
 This repository contains a Docker image with PHP and pre-installed extensions and development tools. This image is designed to provide a comprehensive development environment for PHP projects.
 
+Complete [docker image](https://hub.docker.com/r/ipfwd/php-extended).
+
 ## Features
 
 - PHP version: 8.4 (can be customized via build argument)
