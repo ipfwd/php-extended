@@ -1,24 +1,27 @@
-ARG PHP_VERSION="8.4-zts-bookworm"
+ARG PHP_VERSION="8.4"
 ARG PHP_EXTENSIONS="memcache redis mongodb inotify ds protobuf grpc imap ast xhprof opentelemetry gd gmp pdo_pgsql pgsql exif sockets bcmath opcache zip pcntl intl xsl xdebug"
-ARG ADVANCED_TOOLS="openssh-client sudo git-core git-lfs mc jq uuid-runtime"
+ARG ADVANCED_TOOLS="openssh-client git-core git-lfs mc jq uuid-runtime"
+ARG COMPOSER_HOME="/usr/local/share/composer"
 ARG COMPOSER_SETUP_HASH="dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6"
 
-FROM mirror.gcr.io/library/php:${PHP_VERSION}
+FROM mirror.gcr.io/library/php:${PHP_VERSION}-zts-bookworm
 
-LABEL maintainer="Ipfwd Docker Images <docker@ipfwd.net>"
-LABEL version="${PHP_VERSION}"
-LABEL description="Docker image with PHP ${PHP_VERSION} and essential development tools"
-LABEL org.opencontainers.image.source="https://github.com/ipfwd/php-extended"
-LABEL org.opencontainers.image.authors='Ipfwd "docker@ipfwd.net"'
-LABEL net.ipfwd.image="true"
+LABEL maintainer="Ipfwd Docker Images <docker@ipfwd.net>" \
+    version="${PHP_VERSION}" \
+    description="Docker image with PHP ${PHP_VERSION} and essential development tools" \
+    org.opencontainers.image.source="https://github.com/ipfwd/php-extended" \
+    org.opencontainers.image.authors='Ipfwd "docker@ipfwd.net"' \
+    net.ipfwd.image="true"
 
-ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/app/vendor/bin:/usr/local/share/composer/vendor/bin:/app/bin:/app"
-ENV LANG=en_US.utf8
+ARG COMPOSER_HOME
+ENV COMPOSER_HOME=${COMPOSER_HOME} \
+    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/app/vendor/bin:${COMPOSER_HOME}/vendor/bin:/app/bin:/app" \
+    LANG=en_US.utf8
 
 ARG ADVANCED_TOOLS
 ENV ADVANCED_TOOLS=${ADVANCED_TOOLS}
 RUN apt update; \
-    apt install --no-install-recommends -y locales curl ${ADVANCED_TOOLS}
+    apt install --no-install-recommends -y locales curl sudo ${ADVANCED_TOOLS}
 
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 
@@ -36,18 +39,16 @@ RUN cd /tmp && \
     chmod a+x /usr/local/sbin/composer && \
     php -r "unlink('composer-setup.php');"
 
-ENV COMPOSER_HOME="/usr/local/share/composer"
-
-RUN mkdir -p /usr/local/share/composer/vendor/bin && \
-    curl -o /usr/local/share/composer/vendor/bin/phpcs \
+RUN mkdir -p ${COMPOSER_HOME}/vendor/bin && \
+    curl -o ${COMPOSER_HOME}/vendor/bin/phpcs \
          -L https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar && \
-    curl -o /usr/local/share/composer/vendor/bin/phpcbf \
+    curl -o ${COMPOSER_HOME}/vendor/bin/phpcbf \
          -L https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar && \
-    curl -o /usr/local/share/composer/vendor/bin/phpdocumentor \
+    curl -o ${COMPOSER_HOME}/vendor/bin/phpdocumentor \
          -L https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.6.0/phpDocumentor.phar && \
     COMPOSER_MEMORY_LIMIT=-1 composer global require phan/phan && \
     COMPOSER_MEMORY_LIMIT=-1 composer global require rector/rector && \
-    chmod a+x /usr/local/share/composer/vendor/bin/* && \
+    chmod a+x ${COMPOSER_HOME}/vendor/bin/* && \
     echo "[done]"
 
 RUN adduser --gecos --quiet --disabled-password --no-create-home --home /app app && \
@@ -63,11 +64,13 @@ RUN \
 
 COPY php.ini /usr/local/etc/php/
 
-RUN chown -R app:app /usr/local/share/composer
+RUN chown -R app:app ${COMPOSER_HOME}
 USER app
 
 WORKDIR /app
 STOPSIGNAL SIGTERM
+
+ONBUILD RUN echo $(date +%m%d%H%M) | sudo tee /build-date.txt;
 
 CMD []
 ENTRYPOINT ["php"]
