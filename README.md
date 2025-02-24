@@ -1,3 +1,5 @@
+![](logo.webp)
+
 # Docker Image with PHP and Development Tools
 
 This repository contains a Docker image with PHP and pre-installed extensions and development tools. This image is designed to provide a comprehensive development environment for PHP projects.
