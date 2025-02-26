@@ -1,10 +1,11 @@
 ARG PHP_VERSION="8.4"
+ARG PHP_FROM="php:${PHP_VERSION}-zts-bookworm"
 ARG PHP_EXTENSIONS="memcache redis mongodb inotify ds protobuf grpc imap ast xhprof opentelemetry gd gmp pdo_pgsql pgsql exif sockets bcmath opcache zip pcntl intl xsl xdebug"
 ARG ADVANCED_TOOLS="openssh-client git-core git-lfs mc jq uuid-runtime"
 ARG COMPOSER_HOME="/usr/local/share/composer"
 ARG COMPOSER_SETUP_HASH="dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6"
 
-FROM mirror.gcr.io/library/php:${PHP_VERSION}-zts-bookworm
+FROM ${PHP_FROM}
 
 LABEL maintainer="Ipfwd Docker Images <docker@ipfwd.net>" \
     version="${PHP_VERSION}" \
