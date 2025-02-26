@@ -14,10 +14,10 @@ endif
 		chmod a+x "$(PHP_VERSION)/$${file}"; \
 	done
 	sed -i -e 's#FROM debian:bookworm-slim#FROM registry.astralinux.ru/library/astra/ubi18:1.8#g' $(PHP_VERSION)/Dockerfile
-	docker build -t ipfwd/php:$(PHP_VERSION)-zts-astra -f $(PHP_VERSION)/Dockerfile $(PHP_VERSION)
+	docker build -t ipfwd/php-astra:$(PHP_VERSION)-zts -f $(PHP_VERSION)/Dockerfile $(PHP_VERSION)
 
 push:
 ifndef PHP_VERSION
 	$(error Define PHP_VERSION to build image)
 endif
-	docker push -t ipfwd/php:$(PHP_VERSION)-zts-astra -f $(PHP_VERSION)/Dockerfile $(PHP_VERSION)
+	docker push -t ipfwd/php-astra:$(PHP_VERSION)-zts -f $(PHP_VERSION)/Dockerfile $(PHP_VERSION)
