@@ -1,10 +1,10 @@
 ARG PHP_VERSION="8.4"
 ARG PHP_FROM="ipfwd/php-extended:$(PHP_VERSION)-zts-bookworm"
-ARG RR_VERSION="2025.1.2"
-ARG RR_SHA256SUM="abac9a924e96ebce7f9f39e9497ff14096dd1bb90af2719bfb03997cfd524f4e"
+ARG RR_VERSION="2024.3.5"
+ARG RR_SHA256SUM="77feb394b0ca622b18bc2933edb275c6f4b7e9effc04926e6d1ad2949780da50"
 
-ARG GO_VERSION="1.24.4"
-ARG GO_SHA256SUM="77e5da33bb72aeaef1ba4418b6fe511bc4d041873cbf82e5aa6318740df98717"
+ARG GO_VERSION="1.24.2"
+ARG GO_SHA256SUM="68097bd680839cbc9d464a0edce4f7c333975e27a90246890e9f1078c7e702ad"
 
 FROM ${PHP_FROM} AS roadrunner
 
@@ -21,8 +21,8 @@ ARG GO_SHA256SUM
 ENV GO_SHA256SUM=${GO_SHA256SUM}
 
 ENV LDFLAGS="-s \
--X github.com/roadrunner-server/roadrunner/v2025/internal/meta.version=v${RR_VERSION} \
--X github.com/roadrunner-server/roadrunner/v2025/internal/meta.buildTime=0"
+-X github.com/roadrunner-server/roadrunner/v2024/internal/meta.version=v${RR_VERSION} \
+-X github.com/roadrunner-server/roadrunner/v2024/internal/meta.buildTime=0"
 
 USER root
 
