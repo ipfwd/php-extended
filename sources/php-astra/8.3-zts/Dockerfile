@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM registry.astralinux.ru/library/astra/ubi18:1.8.1
+FROM registry.astralinux.ru/library/astra/ubi18:1.8
 
 # prevent Debian's PHP packages from being installed
 # https://github.com/docker-library/php/pull/542

@@ -54,7 +54,7 @@ if ! which docker-php-ext-configure >/dev/null || ! which docker-php-ext-enable 
 	exit 1
 fi
 
-IPE_VERSION=2.8.0
+IPE_VERSION=2.8.1
 
 
 if test "$IPE_VERSION" = master && test "${CI:-}" != true; then
@@ -3356,6 +3356,8 @@ installRemoteModule() {
 			if test -z "$installRemoteModule_version"; then
 				if test $PHP_MAJMIN_VERSION -le 506; then
 					installRemoteModule_version=0.2.1
+				elif test $PHP_MAJMIN_VERSION -le 704; then
+					installRemoteModule_version=0.3.2
 				else
 					installRemoteModule_version=beta
 				fi
