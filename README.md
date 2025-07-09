@@ -86,7 +86,7 @@ The following development tools are pre-installed in the Docker image:
 | Phan               | Static analyzer for PHP                              |
 | Rector             | Instant upgrades and refactoring of PHP code         |
 
-# Examples of Using the Image for Development
+# Examples of using the image for Development
 
 To run a PHP script located on your host machine:
 
@@ -104,6 +104,23 @@ To run Composer commands within the container:
 
 ```shell
 docker run -it --rm -v $(pwd):/app --entrypoint=composer ipfwd/php-extended install
+```
+# Using the image as a source
+
+```shell
+FROM ipfwd/php-extended:8.2-fpm-astra
+...
+```
+
+If you want to install additional extension, you can use `ipfwd/php-extension-installer`.
+```
+# the image contains only a tar with PHP sources, so they need to be unpacked first
+RUN docker-php-source extract
+RUN --mount=type=bind,from=ipfwd/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+    install-php-extensions soap ...; \
+    docker-php-source delete; \
+    rm -rf /usr/src/php
+# ...and removed after
 ```
 
 # License
