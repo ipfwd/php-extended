@@ -105,15 +105,18 @@ To run Composer commands within the container:
 ```shell
 docker run -it --rm -v $(pwd):/app --entrypoint=composer ipfwd/php-extended install
 ```
+
 # Using the image as a source
 
-```shell
+```Dockerfile
 FROM ipfwd/php-extended:8.2-fpm-astra
-...
+
+# ...
 ```
 
 If you want to install additional extension, you can use `ipfwd/php-extension-installer`.
-```
+
+```Dockerfile
 # the image contains only a tar with PHP sources, so they need to be unpacked first
 RUN docker-php-source extract
 RUN --mount=type=bind,from=ipfwd/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
