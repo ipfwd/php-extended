@@ -76,6 +76,3 @@ WORKDIR /app
 STOPSIGNAL SIGTERM
 
 ONBUILD RUN echo $(date +%m%d%H%M) | sudo tee /build-date.txt;
-
-CMD []
-ENTRYPOINT ["php"]

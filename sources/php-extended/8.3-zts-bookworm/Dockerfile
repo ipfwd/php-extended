@@ -63,9 +63,8 @@ RUN adduser --gecos --quiet --disabled-password --no-create-home --home /app app
 RUN \
     rm -rf /usr/share/doc && \
     rm -rf /usr/share/gitweb && \
-    rm -rf /usr/src/* && \
+    rm -rf /usr/src/php/* && \
     rm -rf /var/log/* && \
-    rm -rf /usr/local/include/php/ext/* && \
     rm -rf /tmp/*
 
 COPY php.ini /usr/local/etc/php/
@@ -77,6 +76,3 @@ WORKDIR /app
 STOPSIGNAL SIGTERM
 
 ONBUILD RUN echo $(date +%m%d%H%M) | sudo tee /build-date.txt;
-
-CMD []
-ENTRYPOINT ["php"]

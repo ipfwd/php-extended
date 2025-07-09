@@ -65,7 +65,6 @@ RUN \
     rm -rf /usr/share/gitweb && \
     rm -rf /usr/src/* && \
     rm -rf /var/log/* && \
-    rm -rf /usr/local/include/php/ext/* && \
     rm -rf /tmp/*
 
 COPY php.ini /usr/local/etc/php/
@@ -77,6 +76,3 @@ WORKDIR /app
 STOPSIGNAL SIGTERM
 
 ONBUILD RUN echo $(date +%m%d%H%M) | sudo tee /build-date.txt;
-
-CMD []
-ENTRYPOINT ["php"]
