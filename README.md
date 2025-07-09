@@ -117,7 +117,10 @@ If you want to install additional extension, you can use `ipfwd/php-extension-in
 # the image contains only a tar with PHP sources, so they need to be unpacked first
 RUN docker-php-source extract
 RUN --mount=type=bind,from=ipfwd/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
-    install-php-extensions soap ...
+    install-php-extensions soap ...; \
+    docker-php-source delete; \
+    rm -rf /usr/src/php
+# ...and removed after
 ```
 
 # License
