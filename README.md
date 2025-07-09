@@ -112,7 +112,7 @@ FROM ipfwd/php-extended:8.2-fpm-astra
 ...
 ```
 
-If you want to install additional extension, you can user `ipfwd/php-extension-installer`.
+If you want to install additional extension, you can use `ipfwd/php-extension-installer`.
 ```
 # the image contains only a tar with PHP sources, so they need to be unpacked first
 RUN docker-php-source extract
