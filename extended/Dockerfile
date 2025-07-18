@@ -42,11 +42,11 @@ RUN cd /tmp && \
 
 RUN mkdir -p ${COMPOSER_HOME}/vendor/bin && \
     curl -o ${COMPOSER_HOME}/vendor/bin/phpcs \
-         -L https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar && \
+         -L https://phars.phpcodesniffer.com/phpcs.phar && \
     curl -o ${COMPOSER_HOME}/vendor/bin/phpcbf \
-         -L https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar && \
+         -L https://phars.phpcodesniffer.com/phpcbf.phar && \
     curl -o ${COMPOSER_HOME}/vendor/bin/phpdocumentor \
-         -L https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.6.0/phpDocumentor.phar && \
+         -L https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.8.0/phpDocumentor.phar && \
     COMPOSER_MEMORY_LIMIT=-1 composer global require phan/phan && \
     COMPOSER_MEMORY_LIMIT=-1 composer global require rector/rector && \
     chmod a+x ${COMPOSER_HOME}/vendor/bin/* && \
