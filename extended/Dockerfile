@@ -1,7 +1,9 @@
 ARG PHP_VERSION="8.4"
-ARG PHP_FROM="php:${PHP_VERSION}-zts-bookworm"
-ARG PHP_EXTENSIONS="memcache redis mongodb inotify ds protobuf grpc imap ast xhprof opentelemetry gd gmp pdo_pgsql pgsql exif sockets bcmath opcache zip pcntl intl xsl xdebug"
-ARG ADVANCED_TOOLS="openssh-client git-core git-lfs mc jq uuid-runtime"
+ARG PHP_TYPE="zts"
+ARG PHP_FROM="php:${PHP_VERSION}-${PHP_TYPE}-bookworm"
+ARG PHP_EXTENSIONS="memcache redis mongodb inotify ds protobuf grpc ast xhprof opentelemetry openswoole gd gmp pdo_pgsql pgsql exif sockets bcmath opcache zip pcntl intl imap xsl xdebug imagick"
+ARG ADVANCED_TOOLS="netbase openssh-client git-core mc jq uuid-runtime"
+ARG ADVANCED_LIBS=""
 ARG COMPOSER_HOME="/usr/local/share/composer"
 ARG COMPOSER_SETUP_HASH="dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6"
 
@@ -21,14 +23,17 @@ ENV COMPOSER_HOME=${COMPOSER_HOME} \
 
 ARG ADVANCED_TOOLS
 ENV ADVANCED_TOOLS=${ADVANCED_TOOLS}
+ARG ADVANCED_LIBS
+ENV ADVANCED_LIBS=${ADVANCED_LIBS}
 RUN apt update; \
-    apt install --no-install-recommends -y locales curl sudo ${ADVANCED_TOOLS}
+    apt install --no-install-recommends -y locales curl sudo \
+        ${ADVANCED_LIBS} ${ADVANCED_TOOLS}
 
 RUN localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 
 ARG PHP_EXTENSIONS
 ENV PHP_EXTENSIONS=${PHP_EXTENSIONS}
-RUN  --mount=type=bind,from=ghcr.io/mlocati/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
+RUN  --mount=type=bind,from=ipfwd/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
     install-php-extensions ${PHP_EXTENSIONS}
 
 ARG COMPOSER_SETUP_HASH
@@ -71,6 +76,3 @@ WORKDIR /app
 STOPSIGNAL SIGTERM
 
 ONBUILD RUN echo $(date +%m%d%H%M) | sudo tee /build-date.txt;
-
-CMD []
-ENTRYPOINT ["php"]

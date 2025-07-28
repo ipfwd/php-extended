@@ -63,7 +63,7 @@ RUN adduser --gecos --quiet --disabled-password --no-create-home --home /app app
 RUN \
     rm -rf /usr/share/doc && \
     rm -rf /usr/share/gitweb && \
-    rm -rf /usr/src/* && \
+    rm -rf /usr/src/php && \
     rm -rf /var/log/* && \
     rm -rf /tmp/*
 
