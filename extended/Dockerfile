@@ -36,14 +36,7 @@ ENV PHP_EXTENSIONS=${PHP_EXTENSIONS}
 RUN  --mount=type=bind,from=ipfwd/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
     install-php-extensions ${PHP_EXTENSIONS}
 
-ARG COMPOSER_SETUP_HASH
-ENV COMPOSER_SETUP_HASH=${COMPOSER_SETUP_HASH}
-RUN cd /tmp && \
-    curl https://getcomposer.org/installer -o composer-setup.php && \
-    php -r "if (hash_file('sha384', 'composer-setup.php') === '${COMPOSER_SETUP_HASH}') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }" && \
-    php composer-setup.php --install-dir=/usr/local/sbin --filename=composer && \
-    chmod a+x /usr/local/sbin/composer && \
-    php -r "unlink('composer-setup.php');"
+COPY --from=composer/composer:latest-bin /composer /usr/local/sbin/composer
 
 RUN mkdir -p ${COMPOSER_HOME}/vendor/bin && \
     curl -o ${COMPOSER_HOME}/vendor/bin/phpcs \
