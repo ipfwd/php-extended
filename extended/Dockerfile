@@ -36,7 +36,7 @@ ENV PHP_EXTENSIONS=${PHP_EXTENSIONS}
 RUN  --mount=type=bind,from=ipfwd/php-extension-installer:latest,source=/usr/bin/install-php-extensions,target=/usr/local/bin/install-php-extensions \
     install-php-extensions ${PHP_EXTENSIONS}
 
-COPY --from=composer/composer:latest-bin /composer /usr/local/sbin/composer
+COPY --from=composer/composer:2-bin /composer /usr/local/sbin/composer
 
 RUN mkdir -p ${COMPOSER_HOME}/vendor/bin && \
     curl -o ${COMPOSER_HOME}/vendor/bin/phpcs \
